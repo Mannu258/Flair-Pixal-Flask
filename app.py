@@ -43,6 +43,17 @@ def About():
 def Service():
     return render_template("about.html")
 
+@app.route("/our-pricing", methods=["POST", "GET"])
+def Price():
+    return render_template("price.html")
+
+@app.route("/contact-us", methods=["POST", "GET"])
+def Contact():
+    return render_template("contact.html")
+
+@app.route("/get-quote", methods=["POST", "GET"])
+def Quote():
+    return render_template("quote.html")
 
 
 if __name__ == "__main__":
