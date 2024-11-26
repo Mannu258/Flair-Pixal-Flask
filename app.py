@@ -22,8 +22,6 @@ mail.init_app(app)
 with app.app_context():
     db.create_all()
 
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     # Your custom logic here (logging, notifications, etc.)
@@ -33,27 +31,6 @@ def page_not_found(e):
 @app.route("/", methods=["POST", "GET"])
 def index():
     return render_template("index.html")
-
-
-@app.route("/about-us", methods=["POST", "GET"])
-def About():
-    return render_template("about.html")
-
-@app.route("/what-we-do", methods=["POST", "GET"])
-def Service():
-    return render_template("about.html")
-
-@app.route("/our-pricing", methods=["POST", "GET"])
-def Price():
-    return render_template("price.html")
-
-@app.route("/contact-us", methods=["POST", "GET"])
-def Contact():
-    return render_template("contact.html")
-
-@app.route("/get-quote", methods=["POST", "GET"])
-def Quote():
-    return render_template("quote.html")
 
 
 if __name__ == "__main__":
