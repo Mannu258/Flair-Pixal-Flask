@@ -5,8 +5,8 @@ from flask import jsonify
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite3.db"
-db = SQLAlchemy()
-db.init_app(app)
+db = SQLAlchemy(app)
+
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
@@ -29,6 +29,62 @@ class FormData(db.Model):
 
     def __repr__(self):
         return "<FormData %r>" % self.email
+    
+with app.app_context():
+    db.create_all()
+    
+    
+def save_main_form_data(name, email, number, select, message):
+    try:
+        form_data = FormData(
+            name=name,
+            email=email,
+            number=number,
+            select_OR_SUBJECT=select,
+            message=message,
+        )
+        db.session.add(form_data)
+        db.session.commit()
+        # return True
+        return "Successfull"
+    except Exception as e:
+        return e
+
+
+def save_conditional_form_data(cname, cemail, cnumber, csubject, cmessage):
+    try:
+
+        form_data = FormData(
+            name=cname,
+            email=cemail,
+            number=cnumber,
+            select_OR_SUBJECT=csubject,
+            message=cmessage,
+        )
+        db.session.add(form_data)
+        db.session.commit()
+        # return True
+        return "Successfull"
+    except Exception as e:
+        return e
+
+
+def save_single_email_form_data(email):
+    try:
+        
+        form_data = FormData(
+            name="Single Email Submission",
+            email=email,
+            number="N/A",
+            select_OR_SUBJECT="N/A",
+            message="Single Email Submission",
+        )
+        db.session.add(form_data)
+        db.session.commit()
+        return "Successfull"
+    except Exception as e:
+        return e
+
 
 
 
@@ -51,15 +107,12 @@ def index():
             cnumber = request.form.get("cnumber")
             csubject = request.form.get("csubject")
             cmessege = request.form.get("cmessage")
-            from Database import save_conditional_form_data
 
             validate = save_conditional_form_data(cname, cemail, cnumber, csubject, cmessege)
             if validate=="True":
                 pass
             else:
                 return f"{validate}"
-
-        from Database import save_main_form_data
 
         Validate = save_main_form_data(name, email, number, select, message)
         if Validate=="True":
@@ -69,7 +122,6 @@ def index():
     if request.method == "GET":
         email = request.args.get("email")
         if email:
-            from Database import save_single_email_form_data
             validate = save_single_email_form_data(email)
             if validate=="True":
                 pass
