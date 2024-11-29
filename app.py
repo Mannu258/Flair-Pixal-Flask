@@ -141,7 +141,7 @@ def Data():
         form_data = FormData.query.all()
         return render_template('Database.html', form_data=form_data)
     else:
-        # If the 'is_admin' parameter is missing or not 'True', trigger a 404 error
+        #Passowrd:-  administrator?is_admin=True
         return redirect("/Error")
 
 
