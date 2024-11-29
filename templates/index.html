@@ -321,7 +321,8 @@
                             <i class="fa fa-code text-white"></i>
                         </div>
                         <h4 class="mb-3">App Development</h4>
-                        <p class="m-0">Build modern, responsive Android And IOS Apps tailored to your business needs, ensuring
+                        <p class="m-0">Build modern, responsive Android And IOS Apps tailored to your business needs,
+                            ensuring
                             seamless user experiences and cutting-edge functionality</p>
                         <a class="btn btn-lg btn-primary rounded" href="">
                             <i class="bi bi-arrow-right"></i>
@@ -513,46 +514,48 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5">
-                    <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn"
-                        data-wow-delay="0.9s">
-                        <form>
-                            <div class="row g-3">
-                                <div class="col-xl-12">
-                                    <input type="text" class="form-control bg-light border-0" placeholder="Your Name"
-                                        style="height: 55px;">
+                <form action="/" method="post">
+                    <div class="col-lg-5">
+                        <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn"
+                            data-wow-delay="0.9s">
+                                <div class="row g-3">
+                                    <div class="col-xl-12">
+                                        <input type="text" name="name" class="form-control bg-light border-0"
+                                            placeholder="Your Name" style="height: 55px;" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="email" name="email" class="form-control bg-light border-0"
+                                            placeholder="Your Email" style="height: 55px;" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="number" name="number" class="form-control bg-light border-0"
+                                            placeholder="Your Number" style="height: 55px;" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <select name="select" class="form-select bg-light border-0"
+                                            style="height: 55px;" required>
+                                            <option selected>Select A Service</option>
+                                            <option value="Website Development">Website Development</option>
+                                            <option value="Website Redesign">Website Redesign</option>
+                                            <option value="Advanced SEO">Advanced SEO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea name="Message" class="form-control bg-light border-0" rows="3"
+                                            placeholder="Message"></textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-dark w-100 py-3" type="submit">Request A Quote</button>
+                                    </div>
                                 </div>
-                                <div class="col-12">
-                                    <input type="email" class="form-control bg-light border-0" placeholder="Your Email"
-                                        style="height: 55px;">
-                                </div>
-                                <div class="col-12">
-                                    <input type="number" class="form-control bg-light border-0"
-                                        placeholder="Your Number" style="height: 55px;">
-                                </div>
-                                <div class="col-12">
-                                    <select class="form-select bg-light border-0" style="height: 55px;">
-                                        <option selected>Select A Service</option>
-                                        <option value="1">Service 1</option>
-                                        <option value="2">Service 2</option>
-                                        <option value="3">Service 3</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <textarea class="form-control bg-light border-0" rows="3"
-                                        placeholder="Message"></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button class="btn btn-dark w-100 py-3" type="submit">Request A Quote</button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
 </section>
+</form>
 <!-- Quote End -->
 
 
@@ -671,26 +674,26 @@
         </div>
         <div class="row g-5">
             <div class="col-lg-6 wow slideInUp" data-wow-delay="0.3s">
-                <form>
+                <form action="/" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <input type="text" class="form-control border-0 bg-light px-4" placeholder="Your Name"
+                            <input type="text" name="cname" class="form-control border-0 bg-light px-4" placeholder="Your Name"
                                 style="height: 55px;">
                         </div>
                         <div class="col-md-6">
-                            <input type="email" class="form-control border-0 bg-light px-4" placeholder="Your Email"
+                            <input type="email" name="cemail" class="form-control border-0 bg-light px-4" placeholder="Your Email"
                                 style="height: 55px;">
                         </div>
                         <div class="col-12">
-                            <input type="number" class="form-control border-0 bg-light px-4" placeholder="Mobile Number"
+                            <input type="number" name="cnumber" class="form-control border-0 bg-light px-4" placeholder="Mobile Number"
                                 style="height: 55px;">
                         </div>
                         <div class="col-12">
-                            <input type="text" class="form-control border-0 bg-light px-4" placeholder="Subject"
+                            <input type="text" name="csubject" class="form-control border-0 bg-light px-4" placeholder="Subject"
                                 style="height: 55px;">
                         </div>
                         <div class="col-12">
-                            <textarea class="form-control border-0 bg-light px-4 py-3" rows="4"
+                            <textarea class="form-control border-0 bg-light px-4 py-3" name="cmessage" rows="4"
                                 placeholder="Message"></textarea>
                         </div>
                         <div class="col-12">

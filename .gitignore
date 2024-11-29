@@ -1,3 +1,4 @@
-** project.db
+** sqlite3.db
 .venv
 instance
+__pycache__
