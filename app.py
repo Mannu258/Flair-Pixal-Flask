@@ -46,7 +46,7 @@ def save_main_form_data(name, email, number, select, message):
         db.session.add(form_data)
         db.session.commit()
         # return True
-        return "Successfull"
+        return True
     except Exception as e:
         return e
 
@@ -64,7 +64,7 @@ def save_conditional_form_data(cname, cemail, cnumber, csubject, cmessage):
         db.session.add(form_data)
         db.session.commit()
         # return True
-        return "Successfull"
+        return True
     except Exception as e:
         return e
 
@@ -81,7 +81,7 @@ def save_single_email_form_data(email):
         )
         db.session.add(form_data)
         db.session.commit()
-        return "Successfull"
+        return True
     except Exception as e:
         return e
 
@@ -109,13 +109,13 @@ def index():
             cmessege = request.form.get("cmessage")
 
             validate = save_conditional_form_data(cname, cemail, cnumber, csubject, cmessege)
-            if validate=="True":
+            if validate==True:
                 pass
             else:
                 return f"{validate}"
 
         Validate = save_main_form_data(name, email, number, select, message)
-        if Validate=="True":
+        if Validate==True:
             pass
         else:
             return f"{Validate}"
@@ -123,11 +123,28 @@ def index():
         email = request.args.get("email")
         if email:
             validate = save_single_email_form_data(email)
-            if validate=="True":
+            if validate==True:
                 pass
             else:
                 return f"{validate}"
     return render_template("index.html")
+
+
+from flask import render_template, request, redirect, url_for
+
+from flask import render_template, request, redirect, url_for
+
+@app.route("/administrator")
+def Data():
+    is_admin = request.args.get('is_admin', None)
+    if is_admin == 'True':
+        form_data = FormData.query.all()
+        return render_template('Database.html', form_data=form_data)
+    else:
+        # If the 'is_admin' parameter is missing or not 'True', trigger a 404 error
+        return redirect("/Error")
+
+
 
 
 if __name__ == "__main__":
