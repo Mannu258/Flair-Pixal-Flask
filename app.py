@@ -132,16 +132,29 @@ def index():
 
 from flask import render_template, request, redirect, url_for
 
-from flask import render_template, request, redirect, url_for
+# @app.route("/admin")
+# def Data():
+#     API = request.args.get('API', None)
+#     print(API)
+#     API_PASS = ['9386090900','7017430421']
+#     for i in API_PASS:
+#         if i == API:          Simple logic
 
-@app.route("/administrator")
-def Data():
-    is_admin = request.args.get('is_admin', None)
-    if is_admin == 'True':
+#             form_data = FormData.query.all()
+#             return render_template('Database.html', form_data=form_data)
+#         else:
+#             return redirect("/Error")
+    
+    
+@app.route("/admin")
+def admin_dashboard():
+    API = request.args.get('key', None)
+    API_PASS = ['9386090900', '7017430421']
+    # http://127.0.0.1:8000/admin?key=9386090900
+    if API in API_PASS:
         form_data = FormData.query.all()
         return render_template('Database.html', form_data=form_data)
     else:
-        #Passowrd:-  administrator?is_admin=True
         return redirect("/Error")
 
 
