@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory,redirect
+from flask import Flask, render_template, request, send_from_directory, redirect
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
@@ -10,8 +10,8 @@ db = SQLAlchemy(app)
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
-app.config["MAIL_USERNAME"] = "jeemannu90@gmail.com"
-app.config["MAIL_PASSWORD"] = "icbh jolb cnuv dnbq"
+app.config["MAIL_USERNAME"] = "flairpixal@gmail.com"
+app.config["MAIL_PASSWORD"] = "jusl tfoo dpqr ddih"
 app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 
@@ -29,11 +29,12 @@ class FormData(db.Model):
 
     def __repr__(self):
         return "<FormData %r>" % self.email
-    
+
+
 with app.app_context():
     db.create_all()
-    
-    
+
+
 def save_main_form_data(name, email, number, select, message):
     try:
         form_data = FormData(
@@ -45,7 +46,16 @@ def save_main_form_data(name, email, number, select, message):
         )
         db.session.add(form_data)
         db.session.commit()
-        # return True
+        try:
+            from Email import Submission_Mail
+
+            status = Submission_Mail(name, email, number, select, message)
+            if status:
+                pass
+            else:
+                return f"{status}"
+        except Exception as e:
+            print(e)
         return True
     except Exception as e:
         return e
@@ -63,7 +73,14 @@ def save_conditional_form_data(cname, cemail, cnumber, csubject, cmessage):
         )
         db.session.add(form_data)
         db.session.commit()
-        # return True
+        from Email import Submission_Mail
+
+        status = Submission_Mail(cname, cemail, cnumber, csubject, cmessage)
+        if status:
+            pass
+        else:
+            return f"{status}"
+
         return True
     except Exception as e:
         return e
@@ -71,7 +88,7 @@ def save_conditional_form_data(cname, cemail, cnumber, csubject, cmessage):
 
 def save_single_email_form_data(email):
     try:
-        
+
         form_data = FormData(
             name="Single Email Submission",
             email=email,
@@ -84,8 +101,6 @@ def save_single_email_form_data(email):
         return True
     except Exception as e:
         return e
-
-
 
 
 @app.errorhandler(404)
@@ -108,22 +123,24 @@ def index():
             csubject = request.form.get("csubject")
             cmessege = request.form.get("cmessage")
 
-            validate = save_conditional_form_data(cname, cemail, cnumber, csubject, cmessege)
-            if validate==True:
-                return render_template('Thank-you.html')
+            validate = save_conditional_form_data(
+                cname, cemail, cnumber, csubject, cmessege
+            )
+            if validate == True:
+                return render_template("Thank-you.html")
             else:
                 return f"{validate}"
 
         Validate = save_main_form_data(name, email, number, select, message)
-        if Validate==True:
-            return render_template('Thank-you.html')
+        if Validate == True:
+            return render_template("Thank-you.html")
         else:
             return f"{Validate}"
     if request.method == "GET":
         email = request.args.get("email")
         if email:
             validate = save_single_email_form_data(email)
-            if validate==True:
+            if validate == True:
                 pass
             else:
                 return f"{validate}"
@@ -142,20 +159,18 @@ def index():
 #             return render_template('Database.html', form_data=form_data)
 #         else:
 #             return redirect("/Error")
-    
-    
+
+
 @app.route("/admin")
 def admin_dashboard():
-    API = request.args.get('key', None)
-    API_PASS = ['9386090900', '7017430421']
+    API = request.args.get("key", None)
+    API_PASS = ["9386090900", "7017430421"]
     # http://127.0.0.1:8000/admin?key=9386090900
     if API in API_PASS:
         form_data = FormData.query.all()
-        return render_template('Database.html', form_data=form_data)
+        return render_template("Database.html", form_data=form_data)
     else:
         return redirect("/Error")
-
-
 
 
 if __name__ == "__main__":
