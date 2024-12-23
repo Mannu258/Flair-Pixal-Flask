@@ -6,7 +6,7 @@ def Submission_Mail(name, email, number, select, message):
         # Email details
         subject = "Submission Confirmation - Flair Pixal"
         sender_email = "flairpixal@gmail.com"  # Replace with your sender email
-        bcc_emails = ["mishramandeep@outlook.com"]  # Add any additional BCC addresses here
+        bcc_emails = ["mishramandeep@outlook.com","priyanshuv007@gmail.com","mandeepkumarmannu123@gmail.com","jeemannu90@gmail.com"]  # Add any additional BCC addresses here
 
         # Body of the email
         body = f"""
