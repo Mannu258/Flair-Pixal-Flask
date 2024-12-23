@@ -110,13 +110,13 @@ def index():
 
             validate = save_conditional_form_data(cname, cemail, cnumber, csubject, cmessege)
             if validate==True:
-                pass
+                return render_template('Thank-you.html')
             else:
                 return f"{validate}"
 
         Validate = save_main_form_data(name, email, number, select, message)
         if Validate==True:
-            pass
+            return render_template('Thank-you.html')
         else:
             return f"{Validate}"
     if request.method == "GET":
