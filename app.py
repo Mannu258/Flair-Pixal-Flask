@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory,redirect
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
@@ -22,7 +22,7 @@ mail.init_app(app)
 class FormData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    email = db.Column(db.String(120), unique=True, index=True)
+    email = db.Column(db.String(120))
     number = db.Column(db.String(20))
     select_OR_SUBJECT = db.Column(db.String(100))
     message = db.Column(db.Text)
@@ -129,8 +129,6 @@ def index():
                 return f"{validate}"
     return render_template("index.html")
 
-
-from flask import render_template, request, redirect, url_for
 
 # @app.route("/admin")
 # def Data():
