@@ -33,6 +33,17 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VJJFK2VH7T"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-VJJFK2VH7T');
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     {% endblock %}
 </head>
 
@@ -62,7 +73,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
             <img id="logo" src="{{ url_for('static', filename='img/LOGO.png') }}" alt="">
             <a href="/" class="navbar-brand p-0">
-                
+
                 <h1 class="m-0"></i>Flair Pixal</h1>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -93,7 +104,8 @@
                     <div class="col-lg-4 col-md-6 footer-about">
                         <div
                             class="d-flex flex-column align-items-center justify-content-center text-center h-100 bg-primary p-4">
-                            <img id="logo" style="align-items: center; width: 80px;" src="{{ url_for('static', filename='img/LOGO.png') }}">
+                            <img id="logo" style="align-items: center; width: 80px;"
+                                src="{{ url_for('static', filename='img/LOGO.png') }}">
                             <a href="/" class="navbar-brand">
                                 <h1 class="m-0 text-white"></i>Flair Pixal</h1>
                             </a>
@@ -103,7 +115,8 @@
                                 CTA: Get Started Today (Button linking to services or contact page)</p>
                             <form action="/">
                                 <div class="input-group">
-                                    <input type="text" class="form-control border-white p-3" name="email" placeholder="Your Email">
+                                    <input type="text" class="form-control border-white p-3" name="email"
+                                        placeholder="Your Email">
                                     <button type="submit" class="btn btn-dark">Sign Up</button>
                                 </div>
                             </form>
