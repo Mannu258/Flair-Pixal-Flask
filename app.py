@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, redirect
+from flask import Flask, render_template, request, send_from_directory, redirect ,Response
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
@@ -147,18 +147,34 @@ def index():
     return render_template("index.html")
 
 
-# @app.route("/admin")
-# def Data():
-#     API = request.args.get('API', None)
-#     print(API)
-#     API_PASS = ['9386090900','7017430421']
-#     for i in API_PASS:
-#         if i == API:          Simple logic
+@app.route("/qr_code_maker", methods=["GET", "POST"])
+def qr_code_maker():
+    if request.method == "POST":
+        link = request.form.get("link")
+        name = request.form.get("filename") 
 
-#             form_data = FormData.query.all()
-#             return render_template('Database.html', form_data=form_data)
-#         else:
-#             return redirect("/Error")
+        if link:
+            import qrcode
+            from io import BytesIO
+            from PIL import Image
+            try:
+                qr = qrcode.make(link)
+                img_io = BytesIO()
+                qr.save(img_io, format='PNG') 
+                img_io.seek(0)
+                filename = f"{name}.png" if name else "qr_code.png" 
+                return Response(
+                    img_io.read(),
+                    mimetype='image/png',
+                    headers={'Content-Disposition': f'attachment;filename={filename}'}
+                )
+
+            except Exception as e:
+                return f"Error generating QR code: {str(e)}"
+        else:
+            return "Please enter a URL or text to generate a QR code."
+
+    return render_template("QR.html")
 
 
 @app.route("/admin")
