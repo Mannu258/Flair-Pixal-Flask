@@ -147,7 +147,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/qr_code_maker", methods=["GET", "POST"])
+@app.route("/qr-code-generator", methods=["GET", "POST"])
 def qr_code_maker():
     if request.method == "POST":
         link = request.form.get("link")
