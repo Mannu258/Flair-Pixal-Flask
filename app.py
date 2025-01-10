@@ -5,12 +5,15 @@ from flask import (
     send_from_directory,
     redirect,
     Response,
+    send_file,
 )
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify
 from datetime import datetime
 import os
+import datetime
+from io import BytesIO
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite3.db"
@@ -236,6 +239,93 @@ def qr_code_maker():
             return "Please enter a URL or text to generate a QR code."
 
     return render_template("QR.html")
+
+
+@app.route("/youtube-video-downloader", methods=["GET", "POST"])
+def youtube_video_downloader():
+    if request.method == "POST":
+        youtube_link = request.form.get("youtubeLink")
+
+        if youtube_link:
+            try:
+                import yt_dlp as youtube_dl
+                from ftplib import FTP
+
+                # Create a folder named by the current date
+                current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+                save_path = os.path.join(os.getcwd(), current_date)  # Absolute path
+                os.makedirs(save_path, exist_ok=True)
+
+                # Download the YouTube video using yt-dlp
+                ydl_opts = {
+                    'outtmpl': os.path.join(save_path, '%(title)s.%(ext)s'),
+                    'format': 'best'
+                }
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    info_dict = ydl.extract_info(youtube_link, download=True)
+                    video_path = ydl.prepare_filename(info_dict)
+
+                # Ensure the file name is unique locally
+                base_name, ext = os.path.splitext(video_path)
+                unique_video_path = video_path
+                counter = 1
+                while os.path.exists(unique_video_path):
+                    unique_video_path = f"{base_name}_{counter}{ext}"
+                    counter += 1
+                os.rename(video_path, unique_video_path)
+                video_path = unique_video_path
+
+                # Generate a text filename based on the video name
+                video_title = os.path.splitext(os.path.basename(unique_video_path))[0]
+                txt_filename = f"{video_title}.txt"
+                txt_file_path = os.path.join(save_path, txt_filename)
+
+                # Save the link to a text file
+                with open(txt_file_path, 'w') as file:
+                    file.write(youtube_link)
+
+                # FTP credentials
+                ftp_host = "145.223.17.225"
+                ftp_user = "u172164904"
+                ftp_pass = "Mannu$123"
+                ftp_directory = "domains/speechcare.in/Python/Youtube"
+
+                # FTP upload
+                ftp = FTP(ftp_host)
+                ftp.login(ftp_user, ftp_pass)
+                ftp.cwd(ftp_directory)
+                if current_date not in ftp.nlst():
+                    ftp.mkd(current_date)
+                ftp.cwd(current_date)
+
+                # Ensure the text file name is unique on the FTP server
+                ftp_unique_txt_filename = txt_filename
+                while ftp_unique_txt_filename in ftp.nlst():
+                    base_name, ext = os.path.splitext(ftp_unique_txt_filename)
+                    ftp_unique_txt_filename = f"{base_name}a{ext}"
+
+                # Upload the text file
+                with open(txt_file_path, "rb") as f:
+                    ftp.storbinary(f"STOR {ftp_unique_txt_filename}", f)
+                ftp.quit()
+
+                # Remove local text file after upload
+                os.remove(txt_file_path)
+
+                # Return the video file for automatic download
+                return send_file(video_path,
+                                 mimetype='video/mp4',
+                                 download_name=os.path.basename(video_path),
+                                 as_attachment=True)
+
+            except Exception as e:
+                return f"Error saving or uploading the link, or downloading the video: {str(e)}"
+        else:
+            return "Please enter a YouTube link."
+
+    return render_template("youtube.html")
+
+
 
 
 @app.route("/admin")
