@@ -283,7 +283,7 @@ def youtube_video_downloader():
                     },
                     'cookiefile': 'path/to/cookies.txt'  # Path to the cookie file
                 }
-                
+                import yt_dlp
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(youtube_link, download=True)
                     video_title = ydl.prepare_filename(info)
