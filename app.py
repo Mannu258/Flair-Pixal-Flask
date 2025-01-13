@@ -255,10 +255,8 @@ def admin_dashboard():
     else:
         return redirect("/Error")
 
-
-
-import yt_dlp
 def is_playlist(youtube_link):
+    # Check if the link contains the "list=" parameter, which indicates a playlist
     return "list=" in youtube_link
 
 @app.route("/youtube-video-downloader", methods=["GET", "POST"])
@@ -269,15 +267,27 @@ def youtube_video_downloader():
             try:
                 if is_playlist(youtube_link):
                     raise ValueError("Playlists are not supported. Please enter a single video URL.")
+                
+                # Clean up the tempvideo directory
                 tempvideo_path = "tempvideo"
                 if os.path.exists(tempvideo_path):
                     import shutil
                     shutil.rmtree(tempvideo_path)
                 os.makedirs(tempvideo_path, exist_ok=True)
-                ydl_opts = {'outtmpl': os.path.join(tempvideo_path, '%(title)s.%(ext)s')}
+
+                # Add headers and cookies to make the request appear more human-like
+                ydl_opts = {
+                    'outtmpl': os.path.join(tempvideo_path, '%(title)s.%(ext)s'),
+                    'http_headers': {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
+                    },
+                    'cookiefile': 'path/to/cookies.txt'  # Path to the cookie file
+                }
+                
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(youtube_link, download=True)
                     video_title = ydl.prepare_filename(info)
+
                 return send_file(
                     video_title,
                     mimetype="video/mp4",
