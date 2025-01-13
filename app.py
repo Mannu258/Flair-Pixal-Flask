@@ -6,6 +6,7 @@ from flask import (
     redirect,
     Response,
     send_file,
+    after_this_request,
 )
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
@@ -197,6 +198,7 @@ def qr_code_maker():
 
                 # Create folder with today's date
                 from datetime import datetime
+
                 today_date = datetime.now().strftime("%Y-%m-%d")
                 if today_date not in ftp.nlst():
                     ftp.mkd(today_date)
@@ -242,8 +244,6 @@ def qr_code_maker():
     return render_template("QR.html")
 
 
-
-
 @app.route("/admin")
 def admin_dashboard():
     API = request.args.get("key", None)
@@ -254,6 +254,44 @@ def admin_dashboard():
         return render_template("Database.html", form_data=form_data)
     else:
         return redirect("/Error")
+
+
+
+import yt_dlp
+def is_playlist(youtube_link):
+    return "list=" in youtube_link
+
+@app.route("/youtube-video-downloader", methods=["GET", "POST"])
+def youtube_video_downloader():
+    if request.method == "POST":
+        youtube_link = request.form.get("youtubeLink")
+        if youtube_link:
+            try:
+                if is_playlist(youtube_link):
+                    raise ValueError("Playlists are not supported. Please enter a single video URL.")
+                tempvideo_path = "tempvideo"
+                if os.path.exists(tempvideo_path):
+                    import shutil
+                    shutil.rmtree(tempvideo_path)
+                os.makedirs(tempvideo_path, exist_ok=True)
+                ydl_opts = {'outtmpl': os.path.join(tempvideo_path, '%(title)s.%(ext)s')}
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(youtube_link, download=True)
+                    video_title = ydl.prepare_filename(info)
+                return send_file(
+                    video_title,
+                    mimetype="video/mp4",
+                    download_name=os.path.basename(video_title),
+                    as_attachment=True,
+                )
+            except ValueError as ve:
+                return str(ve)
+            except Exception as e:
+                return f"Error: {str(e)}"
+        else:
+            return "Please enter a YouTube link."
+    return render_template("youtube.html")
+
 
 
 if __name__ == "__main__":
