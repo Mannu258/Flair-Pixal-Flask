@@ -15,6 +15,7 @@ from datetime import datetime
 import os
 import datetime
 from io import BytesIO
+import yt_dlp
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite3.db"
@@ -255,6 +256,8 @@ def admin_dashboard():
     else:
         return redirect("/Error")
 
+
+
 def is_playlist(youtube_link):
     # Check if the link contains the "list=" parameter, which indicates a playlist
     return "list=" in youtube_link
@@ -281,9 +284,9 @@ def youtube_video_downloader():
                     'http_headers': {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
                     },
-                    'cookiefile': 'path/to/cookies.txt'  # Path to the cookie file
+                    'cookiefile': os.path.join('cookies', 'cookies.txt')  # Path to the cookie file in the root directory
                 }
-                import yt_dlp
+                
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     info = ydl.extract_info(youtube_link, download=True)
                     video_title = ydl.prepare_filename(info)
