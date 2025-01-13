@@ -262,6 +262,22 @@ def is_playlist(youtube_link):
     # Check if the link contains the "list=" parameter, which indicates a playlist
     return "list=" in youtube_link
 
+def ensure_cookies_file():
+    cookies_dir = 'cookies'
+    cookies_file = os.path.join(cookies_dir, 'cookies.txt')
+    
+    # Check if the cookies directory exists, if not, create it
+    if not os.path.exists(cookies_dir):
+        os.makedirs(cookies_dir)
+    
+    # Check if the cookies file exists, if not, create it
+    if not os.path.exists(cookies_file):
+        # Create an empty cookies file
+        with open(cookies_file, 'w') as file:
+            file.write("# Your cookies go here")
+
+    return cookies_file
+
 @app.route("/youtube-video-downloader", methods=["GET", "POST"])
 def youtube_video_downloader():
     if request.method == "POST":
@@ -270,6 +286,9 @@ def youtube_video_downloader():
             try:
                 if is_playlist(youtube_link):
                     raise ValueError("Playlists are not supported. Please enter a single video URL.")
+                
+                # Ensure the cookies file exists
+                cookies_file = ensure_cookies_file()
                 
                 # Clean up the tempvideo directory
                 tempvideo_path = "tempvideo"
@@ -284,7 +303,7 @@ def youtube_video_downloader():
                     'http_headers': {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'
                     },
-                    'cookiefile': os.path.join('cookies', 'cookies.txt')  # Path to the cookie file in the root directory
+                    'cookiefile': cookies_file  # Path to the cookie file in the root directory
                 }
                 
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -304,6 +323,8 @@ def youtube_video_downloader():
         else:
             return "Please enter a YouTube link."
     return render_template("youtube.html")
+
+
 
 
 
