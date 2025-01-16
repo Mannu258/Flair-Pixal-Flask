@@ -32,7 +32,6 @@ app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 mail.init_app(app)
 
-
 class FormData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
